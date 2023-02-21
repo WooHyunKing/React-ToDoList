@@ -7,53 +7,86 @@ import {
   useSetRecoilState,
 } from "recoil";
 
-interface IForm {
+interface ITodo {
   toDo: string;
 }
 
-interface IToDo {
-  text: string;
-  id: number;
-  category: "TO_DO" | "DOING" | "DONE";
-}
-
-const toDoState = atom<IToDo[]>({
-  key: "toDo",
-  default: [],
-});
-
 const ToDoList = () => {
-  const [toDos, setToDos] = useRecoilState(toDoState);
-  const { register, handleSubmit, setValue } = useForm<IForm>();
-  const handleValid = ({ toDo }: IForm) => {
-    setToDos((oldToDos) => [
-      { text: toDo, id: Date.now(), category: "TO_DO" },
-      ...oldToDos,
-    ]);
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    setValue,
+  } = useForm<ITodo>();
+
+  const onValid = (data: ITodo) => {
+    console.log(data?.toDo);
     setValue("toDo", "");
   };
-  console.log(toDos);
+
   return (
     <div>
-      <h1>Todo List</h1>
-      <hr />
-      <form onSubmit={handleSubmit(handleValid)}>
+      <form onSubmit={handleSubmit(onValid)}>
         <input
           {...register("toDo", {
-            required: "Please write a ToDo",
+            required: "Todo is required !",
           })}
-          placeholder="Write a Todo"
-        />
+        ></input>
+
         <button>Add</button>
+        <span>{errors?.toDo?.message}</span>
       </form>
-      <ul>
-        {toDos.map((toDo) => (
-          <li key={toDo.id}>{toDo.text}</li>
-        ))}
-      </ul>
     </div>
   );
 };
+
+// interface IForm {
+//   toDo: string;
+// }
+
+// interface IToDo {
+//   text: string;
+//   id: number;
+//   category: "TO_DO" | "DOING" | "DONE";
+// }
+
+// const toDoState = atom<IToDo[]>({
+//   key: "toDo",
+//   default: [],
+// });
+
+// const ToDoList = () => {
+//   const [toDos, setToDos] = useRecoilState(toDoState);
+//   const { register, handleSubmit, setValue } = useForm<IForm>();
+//   const handleValid = ({ toDo }: IForm) => {
+//     setToDos((oldToDos) => [
+//       { text: toDo, id: Date.now(), category: "TO_DO" },
+//       ...oldToDos,
+//     ]);
+//     setValue("toDo", "");
+//   };
+//   console.log(toDos);
+//   return (
+//     <div>
+//       <h1>Todo List</h1>
+//       <hr />
+//       <form onSubmit={handleSubmit(handleValid)}>
+//         <input
+//           {...register("toDo", {
+//             required: "Please write a ToDo",
+//           })}
+//           placeholder="Write a Todo"
+//         />
+//         <button>Add</button>
+//       </form>
+//       <ul>
+//         {toDos.map((toDo) => (
+//           <li key={toDo.id}>{toDo.text}</li>
+//         ))}
+//       </ul>
+//     </div>
+//   );
+// };
 
 // interface IForm {
 //   email: string;
