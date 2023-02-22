@@ -6,58 +6,22 @@ import {
   useRecoilValue,
   useSetRecoilState,
 } from "recoil";
-
-interface IForm {
-  toDo: string;
-}
-
-interface IToDo {
-  text: string;
-  id: number;
-  category: "TODO" | "DOING" | "DONE";
-}
-
-const toDoState = atom<IToDo[]>({
-  key: "toDo",
-  default: [],
-});
+import { IForm, IToDo } from "../interfaces/form";
+import { toDoState } from "../Recoil/atom";
+import CreateToDo from "./CreateToDo";
+import ToDo from "./ToDo";
 
 const ToDoList = () => {
-  const {
-    register,
-    formState: { errors },
-    handleSubmit,
-    setValue,
-  } = useForm<IForm>();
-
-  const [toDo, setToDo] = useRecoilState<IToDo[]>(toDoState);
-
-  const onValid = (data: IForm) => {
-    console.log(data?.toDo);
-    setToDo((item) => [
-      { text: data.toDo, id: Date.now(), category: "TODO" },
-      ...item,
-    ]);
-    setValue("toDo", "");
-  };
+  const toDo = useRecoilValue(toDoState);
 
   return (
     <div>
       <h1>My ToDoList</h1>
-      <hr></hr>
-      <form onSubmit={handleSubmit(onValid)}>
-        <input
-          {...register("toDo", {
-            required: "Todo is required !",
-          })}
-        ></input>
-
-        <button>Add</button>
-        <span>{errors?.toDo?.message}</span>
-      </form>
+      <hr />
+      <CreateToDo />
       <ul>
         {toDo.map((todo) => (
-          <li key={todo.id}>{todo.text}</li>
+          <ToDo key={todo.id} {...todo} />
         ))}
       </ul>
     </div>
