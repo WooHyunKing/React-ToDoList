@@ -25,7 +25,8 @@ const ToDoList = () => {
     setCurrentCate(event.currentTarget.value as any);
   };
 
-  console.log(currentCate);
+  console.log(toDo);
+  console.log(toDos);
 
   return (
     <div>
