@@ -25,10 +25,10 @@ const ToDo = ({ text, id, category }: IToDo) => {
         <button onClick={() => onClick("DOING")}>Doing</button>
       )}
       {category !== "TODO" && (
-        <button onClick={() => onClick("TODO")}>TODO</button>
+        <button onClick={() => onClick("TODO")}>Todo</button>
       )}
       {category !== "DONE" && (
-        <button onClick={() => onClick("DONE")}>DONE</button>
+        <button onClick={() => onClick("DONE")}>Done</button>
       )}
     </li>
   );
