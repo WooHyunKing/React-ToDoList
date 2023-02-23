@@ -7,7 +7,12 @@ import {
   useSetRecoilState,
 } from "recoil";
 import { IForm, IToDo } from "../interfaces/form";
-import { categoryState, toDoSelector, toDoState } from "../Recoil/atom";
+import {
+  Categories,
+  categoryState,
+  toDoSelector,
+  toDoState,
+} from "../Recoil/atom";
 import CreateToDo from "./CreateToDo";
 import ToDo from "./ToDo";
 
@@ -17,7 +22,7 @@ const ToDoList = () => {
   const toDos = useRecoilValue(toDoSelector);
 
   const onInput = (event: React.FormEvent<HTMLSelectElement>) => {
-    setCurrentCate(event.currentTarget.value);
+    setCurrentCate(event.currentTarget.value as any);
   };
 
   console.log(currentCate);
@@ -27,9 +32,9 @@ const ToDoList = () => {
       <h1>My ToDo List</h1>
       <CreateToDo />
       <select onInput={onInput}>
-        <option value="TODO">ToDo</option>
-        <option value="DOING">Doing</option>
-        <option value="DONE">Done</option>
+        <option value={Categories.TODO}>ToDo</option>
+        <option value={Categories.DOING}>Doing</option>
+        <option value={Categories.DONE}>Done</option>
       </select>
       <ul>
         {toDos.map((todo) => (
