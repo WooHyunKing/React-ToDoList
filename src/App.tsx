@@ -1,6 +1,7 @@
 import { createGlobalStyle } from "styled-components";
 import Converter from "./components/Converter";
 import ToDoList from "./components/ToDoList";
+import Router from "./Router";
 
 const GlobalStyle = createGlobalStyle`
 @import url('https://fonts.googleapis.com/css2?family=Open+Sans&family=Source+Sans+Pro:wght@300;400&display=swap');
@@ -71,8 +72,7 @@ function App() {
   return (
     <>
       <GlobalStyle />
-      <ToDoList />
-      <Converter />
+      <Router />
     </>
   );
 }
