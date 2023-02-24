@@ -1,4 +1,5 @@
 import { createGlobalStyle } from "styled-components";
+import Converter from "./components/Converter";
 import ToDoList from "./components/ToDoList";
 
 const GlobalStyle = createGlobalStyle`
@@ -71,6 +72,7 @@ function App() {
     <>
       <GlobalStyle />
       <ToDoList />
+      <Converter />
     </>
   );
 }
