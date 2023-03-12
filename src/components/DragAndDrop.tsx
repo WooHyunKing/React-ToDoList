@@ -8,6 +8,7 @@ import {
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { elementState } from "../Recoil/atom";
+import DraggableCard from "./DraggableCard";
 
 const Wrapper = styled.div`
   display: flex;
@@ -60,17 +61,7 @@ const DragAndDrop = () => {
             {(magic) => (
               <Board ref={magic.innerRef} {...magic.droppableProps}>
                 {elements.map((element, index) => (
-                  <Draggable key={element} draggableId={element} index={index}>
-                    {(magic) => (
-                      <Card
-                        ref={magic.innerRef}
-                        {...magic.draggableProps}
-                        {...magic.dragHandleProps}
-                      >
-                        {element}
-                      </Card>
-                    )}
-                  </Draggable>
+                  <DraggableCard element={element} index={index} />
                 ))}
                 {magic.placeholder}
               </Board>
