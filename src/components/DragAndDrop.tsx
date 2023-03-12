@@ -1,34 +1,85 @@
 import React from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from "react-beautiful-dnd";
+import { useRecoilState } from "recoil";
+import styled from "styled-components";
+import { elementState } from "../Recoil/atom";
+
+const Wrapper = styled.div`
+  display: flex;
+  max-width: 480px;
+  height: 100vh;
+  width: 100%;
+  margin: 0 auto;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Boards = styled.div`
+  display: grid;
+  width: 100%;
+  grid-template-columns: repeat(3, 1fr);
+`;
+
+const Board = styled.div`
+  background-color: grey;
+  padding: 20px 10px;
+  padding-top: 30px;
+  border-radius: 5px;
+  min-height: 300px;
+  margin: 0 2px;
+`;
+
+const Card = styled.div`
+  border-radius: 5px;
+  margin-bottom: 5px;
+  padding: 15px 10px;
+  background-color: white;
+`;
 
 const DragAndDrop = () => {
-  const onDragEnd = () => {};
+  const [elements, setElements] = useRecoilState(elementState);
+  const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
+    if (!destination) return;
+    setElements((oldElements) => {
+      const elementsCopy = [...oldElements];
+      elementsCopy.splice(source.index, 1);
+      elementsCopy.splice(destination?.index as any, 0, draggableId);
+      return elementsCopy;
+    });
+  };
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      <div>
-        <Droppable droppableId="one">
-          {(magic) => (
-            <ul ref={magic.innerRef} {...magic.droppableProps}>
-              <Draggable draggableId="first" index={0}>
-                {(magic) => (
-                  <li ref={magic.innerRef} {...magic.draggableProps}>
-                    <span {...magic.dragHandleProps}>🥕</span>
-                    One
-                  </li>
-                )}
-              </Draggable>
-              <Draggable draggableId="second" index={1}>
-                {(magic) => (
-                  <li ref={magic.innerRef} {...magic.draggableProps}>
-                    <span {...magic.dragHandleProps}>⭐️</span>
-                    Two
-                  </li>
-                )}
-              </Draggable>
-            </ul>
-          )}
-        </Droppable>
-      </div>
+      <Wrapper>
+        <Boards>
+          <Droppable droppableId="one">
+            {(magic) => (
+              <Board ref={magic.innerRef} {...magic.droppableProps}>
+                {elements.map((element, index) => (
+                  <Draggable key={element} draggableId={element} index={index}>
+                    {(magic) => (
+                      <Card
+                        ref={magic.innerRef}
+                        {...magic.draggableProps}
+                        {...magic.dragHandleProps}
+                      >
+                        {element}
+                      </Card>
+                    )}
+                  </Draggable>
+                ))}
+                {magic.placeholder}
+              </Board>
+            )}
+          </Droppable>
+          <Board></Board>
+          <Board></Board>
+        </Boards>
+      </Wrapper>
     </DragDropContext>
   );
 };

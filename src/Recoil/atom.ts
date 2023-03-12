@@ -50,3 +50,8 @@ export const hourSelector = selector({
     set(minuteState, minute);
   },
 });
+
+export const elementState = atom({
+  key: "element",
+  default: ["a", "b", "c", "d", "e", "f"],
+});
