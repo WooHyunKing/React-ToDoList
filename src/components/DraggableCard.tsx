@@ -15,7 +15,6 @@ interface IDraggableCardProps {
 }
 
 const DraggableCard = ({ element, index }: IDraggableCardProps) => {
-  console.log(element, "has been rerendered !");
   return (
     <Draggable key={element} draggableId={element} index={index}>
       {(magic) => (

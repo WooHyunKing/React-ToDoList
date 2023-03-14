@@ -8,6 +8,7 @@ import {
 import { useRecoilState } from "recoil";
 import styled from "styled-components";
 import { elementState } from "../Recoil/atom";
+import Board from "./Board";
 import DraggableCard from "./DraggableCard";
 
 const Wrapper = styled.div`
@@ -26,49 +27,35 @@ const Boards = styled.div`
   grid-template-columns: repeat(3, 1fr);
 `;
 
-const Board = styled.div`
-  background-color: grey;
-  padding: 20px 10px;
-  padding-top: 30px;
-  border-radius: 5px;
-  min-height: 300px;
-  margin: 0 2px;
-`;
-
-const Card = styled.div`
-  border-radius: 5px;
-  margin-bottom: 5px;
-  padding: 15px 10px;
-  background-color: white;
-`;
-
 const DragAndDrop = () => {
   const [elements, setElements] = useRecoilState(elementState);
-  const onDragEnd = ({ draggableId, destination, source }: DropResult) => {
-    if (!destination) return;
-    setElements((oldElements) => {
-      const elementsCopy = [...oldElements];
-      elementsCopy.splice(source.index, 1);
-      elementsCopy.splice(destination?.index as any, 0, draggableId);
-      return elementsCopy;
-    });
+  const onDragEnd = (info: DropResult) => {
+    console.log(info);
+    const { destination, draggableId, source } = info;
+
+    if (destination?.droppableId === source.droppableId) {
+      setElements((allBoards) => {
+        const boardCopy = [...allBoards[source.droppableId]];
+        boardCopy.splice(source.index, 1);
+        boardCopy.splice(destination?.index as any, 0, draggableId);
+        return {
+          ...allBoards,
+          [source.droppableId]: boardCopy,
+        };
+      });
+    }
   };
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <Wrapper>
         <Boards>
-          <Droppable droppableId="one">
-            {(magic) => (
-              <Board ref={magic.innerRef} {...magic.droppableProps}>
-                {elements.map((element, index) => (
-                  <DraggableCard element={element} index={index} />
-                ))}
-                {magic.placeholder}
-              </Board>
-            )}
-          </Droppable>
-          <Board></Board>
-          <Board></Board>
+          {Object.keys(elements).map((boardId) => (
+            <Board
+              key={boardId}
+              boardId={boardId}
+              elements={elements[boardId]}
+            />
+          ))}
         </Boards>
       </Wrapper>
     </DragDropContext>

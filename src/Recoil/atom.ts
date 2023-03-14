@@ -51,7 +51,15 @@ export const hourSelector = selector({
   },
 });
 
-export const elementState = atom({
+interface IElementState {
+  [key: string]: string[];
+}
+
+export const elementState = atom<IElementState>({
   key: "element",
-  default: ["a", "b", "c", "d", "e", "f"],
+  default: {
+    todo: ["a", "b"],
+    doing: ["c", "d", "e"],
+    done: ["f"],
+  },
 });
